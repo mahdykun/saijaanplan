@@ -74,8 +74,11 @@ section{padding:90px 0}
 @keyframes pop{from{opacity:0;transform:translateY(24px) scale(.96)}}
 .card:hover{transform:translateY(-10px);box-shadow:0 22px 44px rgba(6,52,74,.22)}
 .card .img{height:210px;overflow:hidden;position:relative}
-.card .img svg{width:100%;height:100%;display:block;transition:.6s}
-.card:hover .img svg{transform:scale(1.1)}
+.card .img svg,.card .img img{width:100%;height:100%;display:block;transition:.6s;object-fit:cover}
+.card:hover .img svg,.card:hover .img img{transform:scale(1.1)}
+.mbox .img img,.gal img{width:100%;height:100%;display:block;object-fit:cover}
+.gal img{transition:.6s}
+.gal div:hover img{transform:scale(1.12) rotate(1deg)}
 .badge{position:absolute;top:14px;left:14px;background:rgba(255,255,255,.92);color:var(--deep);font-size:.75rem;font-weight:700;padding:4px 12px;border-radius:20px}
 .card .body{padding:20px 22px 24px}
 .card h3{font-size:1.35rem;color:var(--deep);margin-bottom:6px}
@@ -317,12 +320,42 @@ function food(kind){
   return `<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="300" fill="${bg}"/><circle cx="60" cy="50" r="90" fill="#fff" opacity=".1"/><circle cx="360" cy="270" r="110" fill="#fff" opacity=".1"/>${item}</svg>`;
 }
 
+/* ==========================================================
+   📸 TEMPAT MENARUH FOTO KAMU (CUKUP EDIT BAGIAN INI SAJA)
+   ----------------------------------------------------------
+   Cara pakai:
+   1. Taruh foto di folder yang SAMA dengan file kotabaru.html
+      (boleh buat folder "foto", lalu isi foto di dalamnya).
+   2. Tulis nama file fotonya di antara tanda kutip '' di bawah.
+      Contoh:  'Pantai Gedambaan': 'foto/gedambaan.jpg',
+   3. Kalau dikosongkan '' maka otomatis pakai gambar ilustrasi.
+   ========================================================== */
+const FOTO = {
+  'Pantai Gedambaan'     : 'https://wisatakotabaru.com/wp-content/uploads/2024/05/Pantai-Gedambaan-scaled.jpg',   // contoh: 'foto/gedambaan.jpg'
+  'Pantai Teluk Tamiang' : 'https://wisatakotabaru.com/wp-content/uploads/2024/05/Pantai-Teluk-Tamiang-scaled.jpg',   // contoh: 'foto/tamiang.jpg'
+  'Pulau Sembilan'       : 'https://labuanbajotour.com/wp-content/uploads/2018/12/Pulau-Sembilan-Labuan-Bajo-sumber-ig-jenwa_tour.jpg',   // contoh: 'foto/pulau-sembilan.jpg'
+  'Gunung Mamake'        : 'https://storage.googleapis.com/gides/e2c2ee3143484b171a9096d0846ea983.jpeg',   // contoh: 'foto/sarang-tiung.jpg'
+  'Pegunungan Meratus'   : 'https://indomgb.s3.amazonaws.com/wp-content/uploads/2024/10/21235419/Bentangan-Pegunungan-Meratus-dipotret-dari-puncak-tertingginya-Gunung-Halau-Halau.jpg',   // contoh: 'foto/meratus.jpg'
+  'Air Terjun & Sungai Hutan': 'https://wisatakotabaru.com/wp-content/uploads/2024/05/Air-Terjun-Tumpang-2-3-scaled.jpg' // contoh: 'foto/air-terjun.jpg'
+  'Ikan Bakar Laut': 'https://images.genpi.co/uploads/jogja/arsip/normal/2022/12/24/ikan-laut-bakar-mas-aye-salah-satu-tempat-wisata-kuliner-di-rahf.jpg'
+  'Soto Banjar': 'https://img-global.cpcdn.com/recipes/57b52ad2b52c11bc/1200x630cq80/photo.jpg'
+  'Wadai Banjar': 'https://i0.wp.com/telusuri.id/wp-content/uploads/2018/06/04-pasar-wadai-bingka-dan-kue-lapis-pandan-endah-wulandari.jpg'
+  'Es Kelapa Muda': 'https://assets-a1.kompasiana.com/items/album/2024/07/25/fb-img-1721914975547-66a25684ed6415305f4dc742.jpg'
+};
+// Fungsi: pakai foto kalau ada, kalau kosong pakai ilustrasi
+function pic(p){
+  const src = FOTO[p.name];
+  return src
+    ? `<img src="${src}" alt="${p.name}" loading="lazy">`
+    : scene(p.type,p.seed);
+}
+
 /* ===== DATA ===== */
 const places=[
  {id:0,name:'Pantai Gedambaan',cat:'pantai',type:'pantai',seed:1,short:'Pantai berpasir dengan ombak tenang dan pemandangan matahari terbenam.',long:'Salah satu pantai paling dikenal di Pulau Laut. Cocok untuk bersantai, berfoto saat senja, dan menikmati jajanan pesisir.',best:'Sore hari',act:'Foto senja, piknik',ideal:'Keluarga & pasangan',days:'Setengah hari',hours:4},
  {id:1,name:'Pantai Teluk Tamiang',cat:'pantai',type:'pantai2',seed:2,short:'Teluk yang teduh dengan suasana pesisir yang akrab dan santai.',long:'Teluk dengan perairan yang relatif tenang dan suasana kampung nelayan di sekitarnya. Tempat yang pas untuk menikmati hasil laut segar.',best:'Pagi & sore',act:'Berjalan di pantai, kuliner laut',ideal:'Keluarga',days:'Setengah hari',hours:3},
  {id:2,name:'Pulau Sembilan',cat:'pulau',type:'pulau',seed:0,short:'Gugusan pulau kecil dengan laut jernih untuk berlayar dan snorkeling.',long:'Gugusan pulau-pulau di perairan Kotabaru yang cocok untuk wisata bahari: berlayar, memancing, dan menikmati panorama laut lepas. Perjalanan memakai perahu dari daratan.',best:'Musim tenang (cuaca cerah)',act:'Island hopping, snorkeling',ideal:'Petualang',days:'1 hari penuh',hours:8},
- {id:3,name:'Pantai Sarang Tiung',cat:'pantai',type:'senja',seed:1,short:'Hamparan pantai luas, favorit pencari langit senja yang dramatis.',long:'Pantai dengan hamparan pasir dan langit luas yang indah menjelang malam. Pas untuk fotografi dan menikmati suasana tenang.',best:'Menjelang senja',act:'Fotografi, jalan santai',ideal:'Fotografer',days:'Setengah hari',hours:3},
+ {id:3,name:'Gunung Mamake',cat:'alam',type:'gunung',seed:1,short:'Bukit wisata alam dengan panorama luas dan area paralayang.',long:'Destinasi wisata alam berbasis petualangan yang dikembangkan Pemkab Kotabaru. Di kawasan ini juga ada area pendaratan paralayang dan gantole, jadi cocok untuk menikmati panorama dari ketinggian.',best:'Pagi atau sore',act:'Menikmati pemandangan, foto, melihat paralayang',ideal:'Pencinta alam & petualang',days:'Setengah hari',hours:3},
  {id:4,name:'Pegunungan Meratus',cat:'alam',type:'gunung',seed:2,short:'Hutan hujan tropis dan perbukitan, rumah bagi masyarakat Dayak Meratus.',long:'Rangkaian pegunungan yang membentang di Kalimantan Selatan, kaya hutan tropis dan budaya Dayak Meratus. Kunjungi bersama pemandu lokal dan hormati adat setempat.',best:'Musim kemarau',act:'Trekking, kunjungan budaya',ideal:'Pencinta alam',days:'1–2 hari',hours:10},
  {id:5,name:'Air Terjun & Sungai Hutan',cat:'alam',type:'air',seed:0,short:'Aliran air sejuk di tengah rimbun hutan, tempat melepas penat.',long:'Kawasan sungai dan air terjun di wilayah perbukitan dengan udara sejuk dan suara air yang menenangkan. Gunakan alas kaki anti licin dan bawa air minum.',best:'Pagi hari',act:'Berenang tepi sungai, trekking ringan',ideal:'Semua usia sehat',days:'Setengah hari',hours:4}
 ];
@@ -337,7 +370,7 @@ const foods=[
  {n:'Wadai Banjar',t:'wadai',d:'Aneka kue tradisional Banjar yang manis dan berwarna cerah, cocok untuk oleh-oleh.'},
  {n:'Es Kelapa Muda',t:'kelapa',d:'Penawar panas setelah seharian di pantai, kelapa muda segar langsung dari kebun pesisir.'}
 ];
-const gallery=['pantai','pulau','gunung','senja','air','pantai2'];
+const gallery=[0,2,4,3,5,1]; // nomor tempat (urutan di daftar places)
 
 /* ===== RENDER ===== */
 const cards=document.getElementById('cards');
@@ -345,7 +378,7 @@ function renderCards(f='all'){
   cards.innerHTML='';
   places.filter(p=>f==='all'||p.cat===f).forEach((p,i)=>{
     const c=document.createElement('div');c.className='card';c.style.animationDelay=i*70+'ms';
-    c.innerHTML=`<div class="img">${scene(p.type,p.seed)}<span class="badge">${p.cat.toUpperCase()}</span></div><div class="body"><h3>${p.name}</h3><p>${p.short}</p><span class="more">Lihat detail →</span></div>`;
+    c.innerHTML=`<div class="img">${pic(p)}<span class="badge">${p.cat.toUpperCase()}</span></div><div class="body"><h3>${p.name}</h3><p>${p.short}</p><span class="more">Lihat detail →</span></div>`;
     c.onclick=()=>openModal(p);cards.appendChild(c);
   });
 }
@@ -359,7 +392,7 @@ document.getElementById('filters').addEventListener('click',e=>{
 /* modal */
 const modal=document.getElementById('modal'),mbox=document.getElementById('mbox');
 function openModal(p){
-  mbox.innerHTML=`<button class="close" aria-label="Tutup">×</button><div class="img">${scene(p.type,p.seed)}</div><div class="in"><h3>${p.name}</h3><p style="margin-top:8px;color:#44606c">${p.long}</p>
+  mbox.innerHTML=`<button class="close" aria-label="Tutup">×</button><div class="img">${pic(p)}</div><div class="in"><h3>${p.name}</h3><p style="margin-top:8px;color:#44606c">${p.long}</p>
   <div class="facts"><div><b>Waktu terbaik</b>${p.best}</div><div><b>Aktivitas</b>${p.act}</div><div><b>Cocok untuk</b>${p.ideal}</div><div><b>Durasi</b>${p.days}</div></div>
   <button class="btn" id="addplan">+ Tambah ke Rencana</button></div>`;
   modal.classList.add('open');document.body.style.overflow='hidden';
@@ -398,7 +431,7 @@ renderPicks();
 
 /* galeri */
 const gl=document.getElementById('gal');
-gallery.forEach((t,i)=>{const d=document.createElement('div');d.innerHTML=scene(t,i);d.onclick=()=>openModal(places.find(p=>p.type===t)||places[0]);gl.appendChild(d)});
+gallery.forEach(id=>{const p=places[id];const d=document.createElement('div');d.innerHTML=pic(p);d.onclick=()=>openModal(p);gl.appendChild(d)});
 
 /* nav, burger, reveal, counters */
 const nav=document.getElementById('nav'),menu=document.getElementById('menu');
